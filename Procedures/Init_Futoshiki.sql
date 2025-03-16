@@ -73,5 +73,7 @@ BEGIN
 	ORDER BY --
 		#v,
 		look DESC
+
+	EXEC [dbo].[Init_HintIds]
 END
 GO

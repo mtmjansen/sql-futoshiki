@@ -10,32 +10,32 @@ BEGIN
 
 	WITH cte_horizontal AS (
 		SELECT --
-			hintId = nr,
-			rowNr = (nr-82)/6+1,
-			columnNr = (nr-82)%6+1
+			posId = nr,
+			rowNr = (nr-50)/6+1,
+			columnNr = (nr-50)%6+1
 		FROM [dbo].[Numbers] n
-		WHERE n.nr BETWEEN 82 AND 123
+		WHERE n.nr BETWEEN 50 AND 91
 	), 
 	cte_vertical AS (
 		SELECT --
-			hintId = nr,
-			rowNr = (nr-124)%6+1,
-			columnNr = (nr-124)/6+1
+			posId = nr,
+			rowNr = (nr-92)%6+1,
+			columnNr = (nr-92)/6+1
 		FROM [dbo].[Numbers] n
-		WHERE n.nr BETWEEN 124 AND 165
+		WHERE n.nr BETWEEN 92 AND 133
 	)
 	INSERT INTO [dbo].[HintIds] (
-		hintId,
+		posId,
 		idLesser,
 		idGreater
 	)
 	SELECT --
-		hintId,
+		posId,
 		idLesser,
 		idGreater
 	FROM (
 		SELECT --
-			hintId,
+			posId,
 			idLesser = c.id,
 			idGreater = c.id + 1
 		FROM cte_horizontal h
@@ -46,7 +46,7 @@ BEGIN
 		UNION
 
 		SELECT --
-			hintId,
+			posId,
 			idLesser = c.id,
 			idGreater = c.id + 7
 		FROM cte_vertical v
