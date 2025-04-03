@@ -9,11 +9,14 @@ BEGIN
 	DECLARE --
 		@OptionsBefore int = 7*7*7,
 		@OptionsAfter int = 1,
-		@CellSolved int = 0
+		@CellSolved int = 0,
+		@Iteration int = 0
 
 	WHILE @OptionsBefore > @OptionsAfter AND @OptionsAfter > 0
 	BEGIN
 		SELECT @OptionsBefore = count(*) FROM [dbo].[Options]
+
+		SET @Iteration = @Iteration + 1
 
 		EXEC [dbo].[Reduce_Options]
 
@@ -21,7 +24,7 @@ BEGIN
 
 		IF(@OptionsBefore <> @OptionsAfter)
 		BEGIN
-			EXEC [dbo].[Show_Status] 1
+			EXEC [dbo].[Show_Status] 1, @Iteration
 		END
 	END
 

@@ -2,7 +2,8 @@ USE Futoshiki
 GO
 
 ALTER PROCEDURE Show_Status 
-	@WithPuzzle bit = 0
+	@WithPuzzle bit = 0,
+	@Iteration int = 0
 AS
 BEGIN
 	SET NOCOUNT ON
@@ -93,7 +94,6 @@ BEGIN
 	END
 	
 	DECLARE --
-		@Iteration int = 0,
 		@OptionsLeft int,
 		@CellSolved int
 
@@ -101,14 +101,12 @@ BEGIN
 	SELECT @CellSolved = count(*) FROM Puzzle
 
 	SELECT --
-		[Iteration] = CAST(@Iteration AS int),
+		[Iteration] = @Iteration,
 		[#CellsSolved] = @CellSolved,
 		[Target] = 49,
 		[%CellsSolved] = cast(100.0 * @CellSolved / 49.0 as decimal (9,1)),
 		[#OptionsLeft ] = @OptionsLeft,
 		[Total] = 343,
 		[%OptionsLeft] = cast(100.0 * @OptionsLeft / 343.0 as decimal (9,1))
-
-		SET @Iteration = @Iteration + 1
 END
 GO
