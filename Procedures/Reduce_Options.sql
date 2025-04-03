@@ -4,6 +4,40 @@ GO
 ALTER PROCEDURE Reduce_Options
 AS
 BEGIN
+	; WITH cte_must_be_gt_answer AS (
+		SELECT --
+			h.idGreater,
+			smallest = min(lesser.answer)
+		FROM dbo.Hints h
+		INNER JOIN dbo.Puzzle lesser --
+		ON lesser.Id = h.idLesser
+		GROUP BY --
+			h.idLesser, 
+			h.idGreater
+	)
+	DELETE o
+	FROM Options o
+	RIGHT JOIN cte_must_be_gt_answer c
+	ON c.idGreater = o.id
+	AND NOT c.smallest < o.answer
+
+	; WITH cte_must_be_lt_answer AS (
+		SELECT --
+			h.idLesser, 
+			largest = max(greater.answer)
+		FROM dbo.Hints h
+		INNER JOIN dbo.Puzzle greater
+		ON greater.Id = h.idGreater
+		GROUP BY --
+			h.idLesser, 
+			h.idGreater
+	)
+	DELETE o
+	FROM Options o
+	RIGHT JOIN cte_must_be_lt_answer c
+	ON c.idLesser = o.id
+	AND NOT c.largest > o.answer
+
 	; WITH cte_must_be_gt AS (
 		SELECT --
 			h.idGreater,
