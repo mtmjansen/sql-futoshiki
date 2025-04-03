@@ -74,7 +74,7 @@ BEGIN
 			WHERE nr BETWEEN 1 AND 13
 		)
 		SELECT
-			[#] =  case when (ROW_NUMBER() over (order by rowNr, alpha))%2=0 then ' ' else cast(rowNr as char) end,
+			[#] =  case when (ROW_NUMBER() over (order by rowNr, alpha))%2=0 then '  ' else concat(cast(rowNr as char(1)),'>') end,
 			[1] = isnull(max([1]), @NO),
 			[ ] = isnull(max([A]), ' '),
 			[2] = isnull(max([2]), @NO),
