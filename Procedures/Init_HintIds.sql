@@ -1,7 +1,7 @@
-USE Futoshiki
+USE [Futoshiki]
 GO
 
-ALTER PROCEDURE dbo.Init_HintIds 
+ALTER PROCEDURE [dbo].[Init_HintIds] 
 AS
 BEGIN
 	SET NOCOUNT ON
@@ -27,17 +27,23 @@ BEGIN
 	INSERT INTO [dbo].[HintIds] (
 		posId,
 		idLesser,
-		idGreater
+		idGreater,
+		rowNr,
+		columnNr
 	)
 	SELECT --
 		posId,
 		idLesser,
-		idGreater
+		idGreater,
+		rowNr,
+		columnNr
 	FROM (
 		SELECT --
 			posId,
 			idLesser = c.id,
-			idGreater = c.id + 1
+			idGreater = c.id + 1,
+			c.rowNr,
+			c.columnNr
 		FROM cte_horizontal h
 		INNER JOIN dbo.Cells c --
 		ON c.rowNr = h.rowNr
@@ -48,7 +54,9 @@ BEGIN
 		SELECT --
 			posId,
 			idLesser = c.id,
-			idGreater = c.id + 7
+			idGreater = c.id + 7,
+			c.rowNr,
+			c.columnNr
 		FROM cte_vertical v
 		INNER JOIN dbo.Cells c --
 		ON c.rowNr = v.rowNr
