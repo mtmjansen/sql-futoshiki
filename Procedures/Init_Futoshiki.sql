@@ -46,32 +46,32 @@ BEGIN
 	WITH cte_combos
 	AS (
 		SELECT --
-			#v = 1,
+			#answers = 1,
 			highest = n.nr,
-			look = stuff('_-_-_-_-_-_-_-_-_', n.nr * 2 - 1, 1, cast(n.nr AS CHAR(1)))
+			look = stuff('_-_-_-_-_-_-_', n.nr * 2 - 1, 1, cast(n.nr AS CHAR(1)))
 		FROM Numbers n
-		WHERE n.nr BETWEEN 1 AND 9
+		WHERE n.nr BETWEEN 1 AND 7
 	
 		UNION ALL
 	
 		SELECT --
-			#v = c.#v + 1,
+			#answers = c.#answers + 1,
 			highest = n.nr,
 			look = stuff(c.look, n.nr * 2 - 1, 1, cast(n.nr AS CHAR(1)))
 		FROM cte_combos c
 		INNER JOIN Numbers n --
 		ON n.nr > c.highest
-		WHERE n.nr BETWEEN 1 AND 9
-			AND c.#v < 7
+		WHERE n.nr BETWEEN 1 AND 7
+			AND c.#answers < 7
 	)
 	INSERT INTO [dbo].[Combos]
 	SELECT --
-		valueCount = #v,
+		#answers,
 		look
 	FROM cte_combos
-	WHERE #v > 1
+	WHERE #answers > 1
 	ORDER BY --
-		#v,
+		#answers,
 		look DESC
 
 	EXEC [dbo].[Init_HintIds]
