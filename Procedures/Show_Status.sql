@@ -14,7 +14,7 @@ BEGIN
 	BEGIN
 		WITH cte_columns AS (
 			SELECT
-				p.rowNr,
+				rowNr = (n.nr+1)/2,
 				p.columnNr,
 				r = (n.nr+1)/2,
 				alpha = char(64+n.nr/2),
